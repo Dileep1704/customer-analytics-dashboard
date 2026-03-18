@@ -36,15 +36,22 @@ col3.metric("Avg Order Value", f"${aov:,.2f}")
 # ---------------------- SALES TREND ----------------------
 st.subheader("📈 Sales Trend")
 
-trend = filtered_df.groupby('order_date')['sales'].sum()
+# Prepare data
+trend = filtered_df.groupby('order_date')['sales'].sum().reset_index()
+trend = trend.sort_values('order_date')
 
-fig, ax = plt.subplots()
-trend.plot(ax=ax)
+# Create better graph
+fig, ax = plt.subplots(figsize=(10, 4))
+
+ax.plot(trend['order_date'], trend['sales'])
+
 ax.set_xlabel("Date")
 ax.set_ylabel("Sales")
+ax.set_title("Sales Over Time")
+
+plt.xticks(rotation=45)
+ax.grid(True)
+
+plt.tight_layout()
 
 st.pyplot(fig)
-
-# ---------------------- ROOT CAUSE ANALYSIS ----------------------
-st.subheader("🔍 Root Cause Analysis")
-
